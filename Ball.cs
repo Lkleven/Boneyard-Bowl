@@ -7,6 +7,8 @@ public class Ball : MonoBehaviour {
 
 	private Rigidbody rb;
 	private AudioSource audioSource;
+	private Vector3 ballStartPosition;
+	//private CameraControl cameraControl;
 
 
 	// Use this for initialization
@@ -14,6 +16,8 @@ public class Ball : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = false;
 		audioSource = GetComponent<AudioSource> ();
+		ballStartPosition = transform.position;
+		//cameraControl = GameObject.FindObjectOfType<CameraControl>();
 	}
 
 	public void Launch (Vector3 velocity){
@@ -33,5 +37,14 @@ public class Ball : MonoBehaviour {
 		if(collider.name.Equals("Lane")){
 			audioSource.Play();
 		}
+	}
+
+	public void Reset(){
+		inPlay = false;
+		rb.useGravity = false;
+		rb.velocity = Vector3.zero;
+		rb.angularVelocity = Vector3.zero;
+		transform.position = ballStartPosition;
+		//cameraControl.ResetCameraPosition ();
 	}
 }

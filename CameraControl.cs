@@ -15,11 +15,12 @@ public class CameraControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (transform.position.z <= 1650f) {				//z.position of the headpin is at 1879
+		if (ball.transform.position.z <= 1650f) {				//z.position of the headpin is at 1879
 			transform.position = ball.transform.position + offset;
 		}
-
-
-	
 	}
+
+	/*public void ResetCameraPosition(){
+		transform.position = ball.transform.position + offset;
+	}*/
 }
