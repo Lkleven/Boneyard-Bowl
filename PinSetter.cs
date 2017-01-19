@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PinSetter : MonoBehaviour {
 	public Text pinCount;
-	public GameObject pinWheel;
+	public GameObject pinWheel,pinSet;
 	public int lastStandingCount = -1;
 
 	private Ball ball;
@@ -22,11 +22,12 @@ public class PinSetter : MonoBehaviour {
 		if (ballEnteredBox) {
 			pinCount.text = CountStanding().ToString ();
 			pinWheel.transform.Rotate ((Vector3.forward * Time.deltaTime) * -180); //wheel rotates 50 degrees along the z axis per second
-			CheckStanding();
+			UpdateStandingCountAndSettle();
 		}
 	}
 
-	void CheckStanding(){
+
+	void UpdateStandingCountAndSettle(){
 		int currentStanding = CountStanding ();
 		if (currentStanding != lastStandingCount) {
 			lastChangeTime = Time.time;
@@ -45,7 +46,6 @@ public class PinSetter : MonoBehaviour {
 		ball.Reset();
 		lastStandingCount = -1; //Indicates pins have settled, and ball not back in box
 		ballEnteredBox = false;
-
 	}
 
 	int CountStanding(){
@@ -58,6 +58,8 @@ public class PinSetter : MonoBehaviour {
 		return standing;
 	}
 
+
+	//Destroys pins leaving the pinSetter GameObject Collider.
 	void OnTriggerExit(Collider collider){
 		GameObject thingLeft = collider.gameObject;
 		if (thingLeft.GetComponent<Pin> ()) {
@@ -83,9 +85,8 @@ public class PinSetter : MonoBehaviour {
 		}
 	}
 
-
-
 	public void RenewPins(){
-		print ("renew");
+		GameObject newPins = Instantiate (pinSet);
+		newPins.transform.position += new Vector3 (0, 40, 0);	//instantiate at the same height as distanceToRaise in Pin.cs due to lowering them again instantly
 	}
 }

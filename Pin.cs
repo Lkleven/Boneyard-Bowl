@@ -2,14 +2,12 @@
 using System.Collections;
 
 public class Pin : MonoBehaviour {
-	public float standingTreshold = 0.5f;
+	public float standingTreshold = 3f;
 	public float distanceToRaise = 40f;
 
-	private Rigidbody rb;
 
 	// Use this for initialization
 	void Start () {
-		Rigidbody rb = GetComponent<Rigidbody> ();
 	}
 	
 	// Update is called once per frame
@@ -17,6 +15,8 @@ public class Pin : MonoBehaviour {
 	
 	}
 
+
+	//returns true if the pin is currently standing within a treshold
 	public bool IsStanding(){
 		Vector3 rotation = transform.rotation.eulerAngles;
 		float tiltInX = Mathf.Abs (rotation.x);
@@ -28,6 +28,7 @@ public class Pin : MonoBehaviour {
 		return false;
 	}
 
+	//raises the pin if its standing. Part of the "tidy" animation
 	public void RaiseIfStanding(){
 		Rigidbody rigb = GetComponent<Rigidbody> ();
 		rigb.useGravity = false;
@@ -36,6 +37,7 @@ public class Pin : MonoBehaviour {
 		}
 	}
 
+	//lower all pins
 	public void Lower(){
 		transform.Translate (new Vector3 (0, -distanceToRaise, 0), Space.World);
 		Rigidbody rigb = GetComponent<Rigidbody> ();

@@ -8,7 +8,6 @@ public class Ball : MonoBehaviour {
 	private Rigidbody rb;
 	private AudioSource audioSource;
 	private Vector3 ballStartPosition;
-	//private CameraControl cameraControl;
 
 
 	// Use this for initialization
@@ -17,7 +16,6 @@ public class Ball : MonoBehaviour {
 		rb.useGravity = false;
 		audioSource = GetComponent<AudioSource> ();
 		ballStartPosition = transform.position;
-		//cameraControl = GameObject.FindObjectOfType<CameraControl>();
 	}
 
 	public void Launch (Vector3 velocity){
@@ -25,12 +23,6 @@ public class Ball : MonoBehaviour {
 		rb.velocity = velocity;
 		//audioSource.Play ();
 		inPlay = true;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-		//rb.AddForce(transform.forward * -speed);
-	
 	}
 
 	void OnTriggerEnter(Collider collider){
