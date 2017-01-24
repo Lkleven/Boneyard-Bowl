@@ -5,18 +5,21 @@ using System.Collections;
 public class PinSetter : MonoBehaviour {
 	public Text pinCount;
 	public GameObject pinWheel,pinSet;
-	public int lastStandingCount = -1;
 
-	private Ball ball;
+	private int lastStandingCount = -1;
 	private bool ballEnteredBox = false;
 	private float lastChangeTime;
 	private int lastSettledCount = 10;
-	private ActionMaster actionMaster;
+	private ActionMaster actionMaster = new ActionMaster();
+
+	private Ball ball;
+	private Animator animator;
 
 	// Use this for initialization
 	void Start () {
-		pinCount.text = CountStanding().ToString ();
 		ball = GameObject.FindObjectOfType<Ball> ();
+		animator = GetComponent<Animator> ();
+		pinCount.text = CountStanding().ToString ();
 	}
 	
 	// Update is called once per frame
@@ -45,15 +48,26 @@ public class PinSetter : MonoBehaviour {
 	}
 
 	void PinsHaveSettled(){
-		int pinCount = lastSettledCount - CountStanding ();	//pinCount counts standing pins for scoring
-		lastSettledCount = CountStanding ();				//Updates lastSettledCount to current standing pins
-
+		int standing = CountStanding ();
+		int pinFall = lastSettledCount - standing;	//pinFall stores the amount standing pins for scoring
+		lastSettledCount = standing;				//Updates lastSettledCount to current standing pins
+		PinMachine(pinFall);
 		ball.Reset();
 		lastStandingCount = -1; //Indicates pins have settled, and ball not back in box
 		ballEnteredBox = false;
 	}
 
-	void PinsFallen(){
+	public void PinMachine(int pins){
+		ActionMaster.Action action = actionMaster.Bowl (pins);
+		Debug.Log ("pins down: " + pins + " - " + action);
+
+		if (action == ActionMaster.Action.Tidy) { 
+			animator.SetTrigger ("tidyTrigger");
+		}
+		else if (action == ActionMaster.Action.Reset || action == ActionMaster.Action.EndTurn || action == ActionMaster.Action.EndGame){ 
+			animator.SetTrigger("resetTrigger");
+			lastSettledCount = 10;		//Resets to 10 pins standing
+		}
 		
 	}
 
@@ -74,13 +88,17 @@ public class PinSetter : MonoBehaviour {
 		if (thingLeft.GetComponent<Pin> ()) {
 			Destroy (thingLeft);
 		}
+		if (thingLeft.GetComponent<Ball> ()) {
+			ballEnteredBox = true;
+		}
+
 	}
 
-	void OnTriggerEnter(Collider collider){
+	/*void OnTriggerEnter(Collider collider){
 		if (collider.GetComponent<Ball> ()) {
 			ballEnteredBox = true;
 		}
-	}
+	}*/
 
 	public void RaisePins(){
 		foreach (Pin pin in GameObject.FindObjectsOfType<Pin>()) {
@@ -98,6 +116,7 @@ public class PinSetter : MonoBehaviour {
 		RemoveEmptyPinContainers ();
 		GameObject newPins = Instantiate (pinSet);
 		newPins.transform.position += new Vector3 (0, 40, 0);	//instantiate at the same height as distanceToRaise in Pin.cs due to lowering them again instantly
+		pinCount.text = "10";									// resets UI counter at 10 pins
 	}
 
 	private void RemoveEmptyPinContainers(){
