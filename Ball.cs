@@ -26,8 +26,14 @@ public class Ball : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider collider){
-		if(collider.name.Equals("Lane")){
+		if(collider.name.Equals("LaneCollider")){
 			audioSource.Play();
+		}
+	}
+
+	void OnTriggerExit(Collider collider){
+		if(collider.name.Equals("LaneCollider")){
+			audioSource.Stop();
 		}
 	}
 

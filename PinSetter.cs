@@ -10,6 +10,8 @@ public class PinSetter : MonoBehaviour {
 	private Ball ball;
 	private bool ballEnteredBox = false;
 	private float lastChangeTime;
+	private int lastSettledCount = 10;
+	private ActionMaster actionMaster;
 
 	// Use this for initialization
 	void Start () {
@@ -43,9 +45,16 @@ public class PinSetter : MonoBehaviour {
 	}
 
 	void PinsHaveSettled(){
+		int pinCount = lastSettledCount - CountStanding ();	//pinCount counts standing pins for scoring
+		lastSettledCount = CountStanding ();				//Updates lastSettledCount to current standing pins
+
 		ball.Reset();
 		lastStandingCount = -1; //Indicates pins have settled, and ball not back in box
 		ballEnteredBox = false;
+	}
+
+	void PinsFallen(){
+		
 	}
 
 	int CountStanding(){
@@ -86,7 +95,17 @@ public class PinSetter : MonoBehaviour {
 	}
 
 	public void RenewPins(){
+		RemoveEmptyPinContainers ();
 		GameObject newPins = Instantiate (pinSet);
 		newPins.transform.position += new Vector3 (0, 40, 0);	//instantiate at the same height as distanceToRaise in Pin.cs due to lowering them again instantly
+	}
+
+	private void RemoveEmptyPinContainers(){
+		GameObject[] pinContainers = GameObject.FindGameObjectsWithTag ("PinContainer");
+		foreach (GameObject pinContainer in pinContainers) {
+			if (pinContainer.transform.childCount == 0) {
+				Destroy (pinContainer);
+			}
+		}
 	}
 }

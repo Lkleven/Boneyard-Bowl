@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScoreMaster : MonoBehaviour {
+public class ActionMasterTest : MonoBehaviour {
 	public enum Action{Reset,Tidy};
 
 	// Use this for initialization
