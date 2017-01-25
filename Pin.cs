@@ -33,6 +33,7 @@ public class Pin : MonoBehaviour {
 		Rigidbody rigb = GetComponent<Rigidbody> ();
 		rigb.useGravity = false;
 		if (IsStanding ()) {
+			transform.rotation = Quaternion.Euler(0,180,0);	//Make sure the pins get lowered at a perfect angle
 			transform.Translate (new Vector3 (0, distanceToRaise, 0), Space.World);
 		}
 	}

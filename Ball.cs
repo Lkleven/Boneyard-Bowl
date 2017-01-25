@@ -14,6 +14,7 @@ public class Ball : MonoBehaviour {
 	private PinSetter pinSetter;
 
 
+
 	// Use this for initialization
 	void Start () {
 		pinSetter = GameObject.FindObjectOfType<PinSetter> ();
@@ -41,7 +42,6 @@ public class Ball : MonoBehaviour {
 		if (inPlay) {
 			timePerTurnAfterBallLaunch -= Time.deltaTime;
 			if (timePerTurnAfterBallLaunch < 0f){
-				//Debug.Log ("Ball TimeOut");
 				Reset ();
 				pinSetter.PinMachine (0);					//Treated as a bowl of 0
 			}
