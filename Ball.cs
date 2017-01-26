@@ -8,16 +8,16 @@ public class Ball : MonoBehaviour {
 	private Rigidbody rb;
 	private AudioSource audioSource;
 	private Vector3 ballStartPosition;
-	private bool resetGutterBall = false, inPinSetterCollider = false;
-	private float gutterBallResetTime = 4f;				//Change this? Change update in Update()
-	private float timePerTurnAfterBallLaunch = 20f;		//Change this?, Change update in Reset()
-	private PinSetter pinSetter;
+	private bool resetGutterBall = false, resetBall = false, inPinSetterCollider = false;
+	private float gutterBallResetTime = 3f, normalBallResetTime = 3f;				//Change this? Change update in Update()
+	private float timePerTurnAfterBallLaunch = 20f;									//Change this?, Change update in Reset()
+	private GameManager gameManager;
 
 
 
 	// Use this for initialization
 	void Start () {
-		pinSetter = GameObject.FindObjectOfType<PinSetter> ();
+		gameManager = GameObject.FindObjectOfType<GameManager> ();
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = false;
 		audioSource = GetComponent<AudioSource> ();
@@ -31,10 +31,21 @@ public class Ball : MonoBehaviour {
 			gutterBallResetTime -= Time.deltaTime;
 			if (gutterBallResetTime < 0f) {
 				//Debug.Log ("Gutterball");
-				pinSetter.PinMachine (0);				//Treated as a bowl of 0
+				gameManager.Bowl (0);				//Treated as a bowl of 0
 				Reset ();
-				gutterBallResetTime = 4f;
+				gutterBallResetTime = 3f;
 				resetGutterBall = false;
+			}
+		}
+
+		if (resetBall) {
+			normalBallResetTime -= Time.deltaTime;
+			if (normalBallResetTime < 0f) {
+				//Debug.Log ("Gutterball");
+
+				Reset ();
+				gutterBallResetTime = 3f;
+				resetBall = false;
 			}
 		}
 
@@ -43,7 +54,7 @@ public class Ball : MonoBehaviour {
 			timePerTurnAfterBallLaunch -= Time.deltaTime;
 			if (timePerTurnAfterBallLaunch < 0f){
 				Reset ();
-				pinSetter.PinMachine (0);					//Treated as a bowl of 0
+				gameManager.Bowl (0);					//Treated as a bowl of 0
 			}
 		}
 	}
@@ -69,6 +80,11 @@ public class Ball : MonoBehaviour {
 		if(collider.name.Equals("LaneCollider")){
 			audioSource.Stop();
 		}
+
+		if(collider.name.Equals("PinSetter")){
+			resetBall = true;
+		}
+
 		//Ball leaves the playarea before it hits the pin area box
 		if(collider.name.Equals("PlayAreaCollider") && !inPinSetterCollider){
 			resetGutterBall = true;

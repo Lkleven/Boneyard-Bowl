@@ -18,7 +18,7 @@ public class ActionMaster{
 
 	}
 
-	public Action Bowl (int pins){ //TODO make private
+	private Action Bowl (int pins){ 
 		if (pins < 0 || pins > 10) {throw new UnityException ("Invalid number of pins");}
 		bowls [bowl - 1] = pins;
 
@@ -57,7 +57,4 @@ public class ActionMaster{
 	private bool Bowl21Awarded(){
 		return(bowls [19-1] + bowls [20-1] >= 10);
 	}
-
-
-
 }
