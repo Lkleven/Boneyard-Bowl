@@ -41,7 +41,7 @@ public class ActionMasterTest{
 
 	[Test]
 	public void T04Ball21ReturnsEndGame(){
-		pinFalls.AddRange(new int[]{ 10,10,10,10,10,10,10,10,10,10,10,10,5 });
+		pinFalls.AddRange(new int[]{ 10,10,10,10,10,10,10,10,10,10,10,5 });
 		Assert.AreEqual (endGame, ActionMaster.NextAction (pinFalls));
 	}
 

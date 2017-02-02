@@ -30,7 +30,7 @@ public class Ball : MonoBehaviour {
 		if (resetGutterBall) {
 			gutterBallResetTime -= Time.deltaTime;
 			if (gutterBallResetTime < 0f) {
-				//Debug.Log ("Gutterball");
+				Debug.Log ("Gutterball");
 				gameManager.Bowl (0);				//Treated as a bowl of 0
 				Reset ();
 				gutterBallResetTime = 3f;
@@ -54,6 +54,7 @@ public class Ball : MonoBehaviour {
 			timePerTurnAfterBallLaunch -= Time.deltaTime;
 			if (timePerTurnAfterBallLaunch < 0f){
 				Reset ();
+				Debug.Log ("Ball Timeout");
 				gameManager.Bowl (0);					//Treated as a bowl of 0
 			}
 		}

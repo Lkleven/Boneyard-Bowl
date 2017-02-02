@@ -25,7 +25,7 @@ public class PinCounter : MonoBehaviour {
 	void Update () {
 		if (ballEnteredBox) {
 			pinCount.text = CountStanding().ToString ();
-			pinWheel.transform.Rotate ((Vector3.forward * Time.deltaTime) * -180); //wheel rotates 50 degrees along the z axis per second
+			pinWheel.transform.Rotate ((Vector3.forward * Time.deltaTime) * 180); //wheel rotates 50 degrees along the z axis per second
 			UpdateStandingCountAndSettle();
 		}
 	}

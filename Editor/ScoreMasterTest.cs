@@ -6,13 +6,7 @@ using System.Linq;			//arrays.ToList()
 
 
 [TestFixture]
-public class PointsMasterTest{
-	private ScoreMaster scoreMaster;
-
-	[SetUp]
-	public void Setup(){
-		scoreMaster = new ScoreMaster ();
-	}
+public class ScoreMasterTest{
 
 	[Test]
 	public void T00ThreeStrikesReturn30(){
@@ -87,6 +81,7 @@ public class PointsMasterTest{
 		List<int> framesList= new List<int> ();
 		bowlList.AddRange (new int[]{2,3});
 		framesList.Add(5);
+		//Debug.Log (ScoreMaster.ScoreFrames (bowlList)[1]);
 		Assert.AreEqual(framesList, ScoreMaster.ScoreFrames(bowlList));
 	}
 
