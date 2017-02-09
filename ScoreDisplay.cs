@@ -48,7 +48,7 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 
-	private void ClearScoreCard(){
+	public void ClearScoreCard(){
 		foreach (Text roll in rollTexts) {
 			roll.text = "";
 		}

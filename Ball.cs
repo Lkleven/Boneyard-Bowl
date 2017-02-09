@@ -4,6 +4,9 @@ using System.Collections;
 public class Ball : MonoBehaviour {
 	public Vector3 launchVelocity;
 	public bool inPlay = false;
+	public Material[] materials;
+
+	private Renderer rend;
 
 	private Rigidbody rb;
 	private AudioSource audioSource;
@@ -17,6 +20,9 @@ public class Ball : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		rend = GetComponent<Renderer> ();
+		rend.enabled = true;
+
 		gameManager = GameObject.FindObjectOfType<GameManager> ();
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = false;
@@ -102,5 +108,9 @@ public class Ball : MonoBehaviour {
 		transform.position = ballStartPosition;
 		transform.rotation = Quaternion.identity;
 		//cameraControl.ResetCameraPosition ();
+	}
+
+	public void SetPlayerMaterial(int playerNumber){
+		rend.sharedMaterial = materials [playerNumber - 1];
 	}
 }

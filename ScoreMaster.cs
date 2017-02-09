@@ -115,4 +115,13 @@ public static class ScoreMaster{
 		}
 		return cumulativeScores;
 	}
+
+	public static int CalculateTotalScore(List<int> rolls){
+		int totalScore = 0;
+
+		foreach (int frameScore in ScoreFrames(rolls)){
+			totalScore += frameScore;
+		}
+		return totalScore;
+	}
 }

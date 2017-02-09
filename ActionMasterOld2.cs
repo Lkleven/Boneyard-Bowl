@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public static class ActionMasterOld2 {
 	public enum Action {Tidy, Reset, EndTurn, EndGame, Undefined};
-	private static int bowlCount = 0;
+	//private static int bowlCount = 0;
 	
 	public static Action NextAction (List<int> rolls) {
 		Debug.Log("ActionMaster " + rolls.Count);
