@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 
 	private int players = 1;
 	private Player currentPlayer;
-	//private Player[] player;
+	private bool pinMachineSwiping = false;
 	private List<Player> playas = new List<Player> ();
 	private PlayerCountGO pcGO;
 
@@ -14,8 +14,16 @@ public class GameManager : MonoBehaviour {
 	private ScoreDisplay scoreDisplay;
 	private LevelManager levelManager;
 
+	static GameManager instance = null;
+
 	void Awake(){
-		DontDestroyOnLoad (gameObject);
+		//Prevents another instance of this script to come to existence by switching scenes
+		if (instance != null) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad (gameObject);
+		}
 	}
 
 	// Use this for initialization
@@ -40,6 +48,7 @@ public class GameManager : MonoBehaviour {
 		}
 		currentPlayer = playas [0];
 	}
+		
 
 	// Handles the bowls (rolls) made by players
 	public void Bowl (int pinFall){
@@ -48,19 +57,37 @@ public class GameManager : MonoBehaviour {
 			bowls.Add (pinFall);
 			ActionMaster.Action nextAction = ActionMaster.NextAction (bowls);
 			pinSetter.PinMachine (nextAction);
-			currentPlayer.GetBall().Reset ();
+
 			UpdateScore (bowls);
 
+			if(nextAction == ActionMaster.Action.Tidy){
+				StartCoroutine(IsSwiping (5.5f, true));
+			}
+
 			if(nextAction == ActionMaster.Action.EndTurn){
-				NextPlayer();
+				StartCoroutine(IsSwiping (5.5f, false));
+
 			}else if(nextAction == ActionMaster.Action.EndGame){
 				currentPlayer.PlayerFinishedGame();
-				NextPlayer();
+				StartCoroutine(IsSwiping (5.5f, false));
 			}
 		}catch{
 			Debug.LogError ("Something went wrong in Bowl()");
 		}
 	}
+
+	//Allows the swiper to clean up the lane before next players turn
+	IEnumerator IsSwiping(float waitTime, bool tidy){
+		pinMachineSwiping = true;
+		yield return new WaitForSeconds (5.5f);
+		Time.timeScale = 1;
+		pinMachineSwiping = false;
+		if (!tidy) {
+			NextPlayer ();
+		}
+	}
+
+		
 
 	/* Controls switching between players
 	 * If a player is finished, the turn is passed on until all players are finished
@@ -72,11 +99,13 @@ public class GameManager : MonoBehaviour {
 
 		if (playas.Count - 1 > playas.IndexOf (currentPlayer)) { 
 			currentPlayer = playas [playas.IndexOf (currentPlayer) + 1];
+			currentPlayer.GetBall().Reset ();
 			if (currentPlayer.GetPlayerFinished()) {
 				NextPlayer ();
 			}
 		} else {
 			currentPlayer = playas [0];
+			currentPlayer.GetBall().Reset ();
 		}
 		currentPlayer.UpdateBallMaterial ();
 		scoreDisplay.ClearScoreCard ();
@@ -113,6 +142,10 @@ public class GameManager : MonoBehaviour {
 		levelManager.LoadNextLevel ();
 	}
 
+	public bool IsPinMachineBusy(){
+		return pinMachineSwiping;
+	}
+
 	public void SetPlayerCount(int playerCount){
 		players = playerCount;
 	}
@@ -120,6 +153,4 @@ public class GameManager : MonoBehaviour {
 	public List<Player> GetPlayers(){
 		return playas;
 	}
-
-
 }

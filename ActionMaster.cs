@@ -51,9 +51,10 @@ public class ActionMaster{
 			return Action.EndTurn;
 		}
 			
-		throw new UnityException ("Exception: No clue what to do");
+		throw new UnityException ("Exception: No clue what to do if code reaches here");
 	}
 
+	// returns true if bowl 19 and 20 totals 10 or more pins fallen.
 	private bool Bowl21Awarded(){
 		return(bowls [19-1] + bowls [20-1] >= 10);
 	}

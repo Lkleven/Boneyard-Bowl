@@ -20,9 +20,22 @@ public class PlayerCountGO : MonoBehaviour {
 	private List<Player> allPlayers = new List<Player> ();		// list of all players, to be sorted by final score when game is finished
 	private ScoreDisplay[] scores;
 	private Color[] playerColors;
+	private AudioSource audioSource;
+
+	static PlayerCountGO instance = null;
 
 	void Awake(){
-		DontDestroyOnLoad (gameObject);
+		//Prevents another instance of this script to come to existence by switching scenes
+		if (instance != null) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad (gameObject);
+		}
+	}
+
+	void Start(){
+		audioSource = GetComponent<AudioSource> ();
 	}
 		
 	void Update(){
@@ -55,6 +68,14 @@ public class PlayerCountGO : MonoBehaviour {
 
 	public Color[] GetPlayerColorsArray(){
 		return playerColors;
+	}
+
+	public void PauseMusic(){
+		audioSource.Pause ();
+	}
+
+	public void ResumeMusic(){
+		audioSource.Play ();
 	}
 		
 

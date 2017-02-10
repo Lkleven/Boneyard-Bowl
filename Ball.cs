@@ -36,7 +36,6 @@ public class Ball : MonoBehaviour {
 		if (resetGutterBall) {
 			gutterBallResetTime -= Time.deltaTime;
 			if (gutterBallResetTime < 0f) {
-				Debug.Log ("Gutterball");
 				gameManager.Bowl (0);				//Treated as a bowl of 0
 				Reset ();
 				gutterBallResetTime = 3f;
@@ -44,13 +43,12 @@ public class Ball : MonoBehaviour {
 			}
 		}
 
+		//Normal Ball Resets
 		if (resetBall) {
 			normalBallResetTime -= Time.deltaTime;
 			if (normalBallResetTime < 0f) {
-				//Debug.Log ("Gutterball");
-
 				Reset ();
-				gutterBallResetTime = 3f;
+				normalBallResetTime = 3f;
 				resetBall = false;
 			}
 		}
@@ -69,7 +67,6 @@ public class Ball : MonoBehaviour {
 	public void Launch (Vector3 velocity){
 		rb.useGravity = true;
 		rb.velocity = velocity;
-		//audioSource.Play ();
 		inPlay = true;
 	}
 
@@ -98,6 +95,7 @@ public class Ball : MonoBehaviour {
 		}
 	}
 
+	//Resets the ball
 	public void Reset(){
 		inPlay = false;
 		inPinSetterCollider = false;
@@ -110,6 +108,7 @@ public class Ball : MonoBehaviour {
 		//cameraControl.ResetCameraPosition ();
 	}
 
+	//Changes the material of the ball relating to current player
 	public void SetPlayerMaterial(int playerNumber){
 		rend.sharedMaterial = materials [playerNumber - 1];
 	}

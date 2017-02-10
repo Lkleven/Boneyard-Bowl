@@ -14,14 +14,6 @@ public class PinSetter : MonoBehaviour {
 		pinCounter = GameObject.FindObjectOfType<PinCounter> ();
 	}
 
-	//Destroys pins leaving the pinSetter GameObject Collider.
-	void OnTriggerExit(Collider collider){
-		GameObject thingLeft = collider.gameObject;
-		if (thingLeft.GetComponent<Pin> ()) {
-			Destroy (thingLeft);
-		}
-	}
-
 	void OnTriggerEnter(Collider collider){
 		if (collider.GetComponent<Ball> ()) {
 			pinCounter.StartCounting();
@@ -47,6 +39,7 @@ public class PinSetter : MonoBehaviour {
 		pinCounter.pinCount.text = "10";						// resets UI counter at 10 pins
 	}
 
+	//Removes pin container game objects that are empty. For a cleaner hierarchy in the inspector during gameplay
 	private void RemoveEmptyPinContainers(){
 		GameObject[] pinContainers = GameObject.FindGameObjectsWithTag ("PinContainer");
 		foreach (GameObject pinContainer in pinContainers) {

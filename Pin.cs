@@ -5,16 +5,13 @@ public class Pin : MonoBehaviour {
 	public float standingTreshold = 3f;
 	public float distanceToRaise = 40f;
 
+	private AudioSource audioSource;
+
 
 	// Use this for initialization
 	void Start () {
+		audioSource = GetComponent<AudioSource> ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 
 	//returns true if the pin is currently standing within a treshold
 	public bool IsStanding(){
@@ -43,5 +40,13 @@ public class Pin : MonoBehaviour {
 		transform.Translate (new Vector3 (0, -distanceToRaise, 0), Space.World);
 		Rigidbody rigb = GetComponent<Rigidbody> ();
 		rigb.useGravity = true;
+	}
+
+	void OnCollisionEnter(Collision other){
+		GameObject thingHit = other.gameObject;
+
+		if(thingHit.GetComponent<Pin>() || thingHit.GetComponent<Ball> ()){
+			audioSource.Play ();
+		}
 	}
 }
