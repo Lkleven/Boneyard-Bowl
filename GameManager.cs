@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,22 +14,28 @@ public class GameManager : MonoBehaviour {
 	private PinSetter pinSetter;
 	private ScoreDisplay scoreDisplay;
 	private LevelManager levelManager;
+	private Animator anim;
 
 	static GameManager instance = null;
 
 	void Awake(){
-		//Prevents another instance of this script to come to existence by switching scenes
-		if (instance != null) {
-			Destroy (gameObject);
+		//Destroys an old instance of GameManager when the game is starting anew, making it easier to manage player creation
+		/*if (instance != null) {
+			Destroy (instance.gameObject);
 		} else {
-			instance = this;
-			GameObject.DontDestroyOnLoad (gameObject);
+			
 		}
+		instance = this;*/
+		GameObject.DontDestroyOnLoad (gameObject);
 	}
 
 	// Use this for initialization
 	void Start () {
+		Debug.Log ("new GameManager");
 		pinSetter = GameObject.FindObjectOfType<PinSetter> ();
+		anim = pinSetter.GetComponent<Animator> ();
+		Debug.Log (anim);
+			
 		scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay> ();
 		pcGO = GameObject.FindObjectOfType<PlayerCountGO> ();
 		levelManager = GameObject.FindObjectOfType <LevelManager> ();
@@ -39,6 +46,12 @@ public class GameManager : MonoBehaviour {
 			Debug.LogWarning ("WARNING: no PlayerCountGO found. Did you start from menu?");
 		}
 		CreatePlayers ();
+	}
+
+	void Update(){
+		if (SceneManager.GetActiveScene ().name.Equals ("_StartMenu")){
+			Destroy(gameObject);
+		}
 	}
 
 	// Creates players, initalizes them with name and player color.
@@ -52,12 +65,16 @@ public class GameManager : MonoBehaviour {
 
 	// Handles the bowls (rolls) made by players
 	public void Bowl (int pinFall){
+		Debug.Log ("ABC " + anim);
 		List<int> bowls = currentPlayer.GetBowls ();
 		try{
+			Debug.Log("A");
 			bowls.Add (pinFall);
+			Debug.Log("B"+ bowls);
 			ActionMaster.Action nextAction = ActionMaster.NextAction (bowls);
-			pinSetter.PinMachine (nextAction);
-
+			Debug.Log("C" + anim);
+			pinSetter.PinMachine (nextAction, anim);
+			Debug.Log("D");
 			UpdateScore (bowls);
 
 			if(nextAction == ActionMaster.Action.Tidy){
