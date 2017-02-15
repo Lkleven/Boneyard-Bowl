@@ -14,27 +14,17 @@ public class GameManager : MonoBehaviour {
 	private PinSetter pinSetter;
 	private ScoreDisplay scoreDisplay;
 	private LevelManager levelManager;
-	private Animator anim;
 
 	static GameManager instance = null;
 
 	void Awake(){
-		//Destroys an old instance of GameManager when the game is starting anew, making it easier to manage player creation
-		/*if (instance != null) {
-			Destroy (instance.gameObject);
-		} else {
-			
-		}
-		instance = this;*/
+		//Allows the game object to transfer between scenes
 		GameObject.DontDestroyOnLoad (gameObject);
 	}
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("new GameManager");
 		pinSetter = GameObject.FindObjectOfType<PinSetter> ();
-		anim = pinSetter.GetComponent<Animator> ();
-		Debug.Log (anim);
 			
 		scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay> ();
 		pcGO = GameObject.FindObjectOfType<PlayerCountGO> ();
@@ -49,6 +39,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Update(){
+		//Deletes current instance of the Game Manager at the _StartMenu scene in order for a new one to be created at game start without conflicts
 		if (SceneManager.GetActiveScene ().name.Equals ("_StartMenu")){
 			Destroy(gameObject);
 		}
@@ -65,16 +56,11 @@ public class GameManager : MonoBehaviour {
 
 	// Handles the bowls (rolls) made by players
 	public void Bowl (int pinFall){
-		Debug.Log ("ABC " + anim);
 		List<int> bowls = currentPlayer.GetBowls ();
 		try{
-			Debug.Log("A");
 			bowls.Add (pinFall);
-			Debug.Log("B"+ bowls);
 			ActionMaster.Action nextAction = ActionMaster.NextAction (bowls);
-			Debug.Log("C" + anim);
-			pinSetter.PinMachine (nextAction, anim);
-			Debug.Log("D");
+			pinSetter.PinMachine (nextAction);
 			UpdateScore (bowls);
 
 			if(nextAction == ActionMaster.Action.Tidy){

@@ -49,16 +49,7 @@ public class PinSetter : MonoBehaviour {
 		}
 	}
 
-	public void PinMachine(ActionMaster.Action action, Animator animator){
-		Debug.Log ("HEST");
-		Debug.Log (animator);
-		if (animator == null) {
-			Debug.Log ("GET");
-			Debug.Log (this );
-			Debug.Log("anim: " + animator);
-		}
-		Debug.Log ("pins down: " + animator);
-
+	public void PinMachine(ActionMaster.Action action){
 		if (action == ActionMaster.Action.Tidy) { 
 			animator.SetTrigger ("tidyTrigger");
 		}
@@ -66,6 +57,5 @@ public class PinSetter : MonoBehaviour {
 			animator.SetTrigger("resetTrigger");
 			pinCounter.Reset ();		//Resets to 10 pins standing
 		}
-		Debug.Log ("pins down: " + action);
 	}
 }

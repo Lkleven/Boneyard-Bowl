@@ -16,7 +16,6 @@ public class Player{
 		name = nameIn;
 		playerColor = colorFromPlayerSelector;
 		ball = GameObject.FindObjectOfType<Ball> ();
-		Debug.Log ("New Playerz");
 	}
 
 	public void PlayerFinishedGame(){
